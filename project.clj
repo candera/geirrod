@@ -7,4 +7,5 @@
                  [ring/ring-core "0.3.11"]
                  [compojure "0.6.5"]
                  [enlive "1.0.0"]]
-  :dev-dependencies [[swank-clojure "1.4.0-SNAPSHOT"]])
+  :dev-dependencies [[swank-clojure "1.4.0-SNAPSHOT"]]
+  :main geirrod.core)

@@ -4,7 +4,8 @@
             [compojure.core :as compojure]
             [compojure.route :as route]
             [compojure.handler :as handler]
-            [ring.adapter.jetty :as jetty]))
+            [ring.adapter.jetty :as jetty])
+  (:gen-class))
 
 (defn- issues-list-url [user repo state]
   (str "https://github.com/api/v2/json/issues/list/" user "/" repo "/" state))
