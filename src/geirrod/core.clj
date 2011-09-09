@@ -33,7 +33,7 @@
   (handler/site page-routes)
   default-routes)
 
-;; (def app (wrap-params all-routes))
+(def app all-routes)
 
 (defn -main [& args]
   (let [port (Integer/parseInt (get (System/getenv) "PORT" "8080"))]
