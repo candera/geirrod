@@ -4,7 +4,8 @@
             [compojure.core :as compojure]
             [compojure.route :as route]
             [compojure.handler :as handler]
-            [ring.adapter.jetty :as jetty])
+            [ring.adapter.jetty :as jetty]
+            [geirrod.pages :as pages])
   (:gen-class))
 
 (defn- issues-list-url [user repo state]
@@ -13,17 +14,13 @@
 (defn issues-list [user repo state]
   (json/parse-string (:body (http/get (issues-list-url user repo state)))))
 
-(defn to-html-str [input] (str input))
-
-(defn test-page [] "Hi!")
-
-(defn index [] "Hello!")
+(defn- to-html-str [input] (str input))
 
 (compojure/defroutes test-routes
-  (compojure/GET "/test" [] (test-page)))
+  (compojure/GET "/test" [] (pages/test-page)))
 
 (compojure/defroutes page-routes
-  (compojure/GET "/" [] (to-html-str (index))))
+  (compojure/GET "/" [] (to-html-str (pages/index))))
 
 (compojure/defroutes default-routes
   (route/resources "/")
