@@ -2,5 +2,6 @@
 
 (defn test-page [] "Hi!")
 
-(defn index [] "Hello world!")
+(defn issues [account repo]
+  (str "Issues list for " account "/" repo " goes here"))
 

@@ -5,6 +5,7 @@
             [compojure.route :as route]
             [compojure.handler :as handler]
             [ring.adapter.jetty :as jetty]
+            [ring.util.response :as response]
             [geirrod.pages :as pages])
   (:gen-class))
 
@@ -20,7 +21,12 @@
   (compojure/GET "/test" [] (pages/test-page)))
 
 (compojure/defroutes page-routes
-  (compojure/GET "/" [] (to-html-str (pages/index))))
+  (compojure/GET "/" [] (response/resource-response "public/index.html"))
+  ;; For this next route, we're using redirect-after-post to get a
+  ;; 303. This is because we want the redirect to result in a GET, not
+  ;; a POST.
+  (compojure/POST "/" [account repo] (response/redirect-after-post (str "/issues/" account "/" repo)))
+  (compojure/GET "/issues/:account/:repo" [account repo] (pages/issues account repo)))
 
 (compojure/defroutes default-routes
   (route/resources "/")
