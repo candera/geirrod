@@ -14,3 +14,11 @@
     (let [line (.readLine in)]
       (if (zero? (mod i 2))
         (println i line)))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require '[clj-http.client :as http])
+(require '[clj-json.core :as json])
+
+(json/parse-string
+ (:body
+  (http/get "https://github.com/api/v2/json/issues/list/candera/artifact/open")))
