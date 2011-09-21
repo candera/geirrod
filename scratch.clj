@@ -18,7 +18,32 @@
 
 (require '[clj-http.client :as http])
 (require '[clj-json.core :as json])
+(use :reload-all 'geirrod.github-api)
 
-(json/parse-string
- (:body
-  (http/get "https://github.com/api/v2/json/issues/list/candera/artifact/open")))
+(issues "candera" "artifact" "open")
+(labels (issues "candera" "artifact" "open"))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use 'net.cgrand.enlive-html)
+
+(deftemplate t1 "html/issues.html" [lanes]
+  [:ol#lanes :li]
+  (clone-for [lane lanes]
+             (content lane)))
+
+(apply str (t1 ["open" "in dev" "ready for qa"]))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use :reload-all 'geirrod.pages)
+(use 'geirrod.github-api)
+
+(def i (issues "candera" "artifact" "open"))
+
+(category-values (label-names (labels i)) "status")
+
+(issues-html "candera" "artifact")
+
