@@ -85,11 +85,12 @@
        (label-names)
        (lanes category)))
 
-(defn group-by-lanes
+(defn group-by-lane
   "Given a category (e.g. 'status') and a seq of issues, return a map
   of lanes to seqs of issues in those lanes. Note that an issue can
   appear in more than one lane if it has more than one label for a
   given category."
   [category issues]
   (reduce merge-to-sets
-   (map #(zipmap (lanes-for-issue category %) (repeat %)) issues)))
+          (map #(zipmap (lanes-for-issue category %) (repeat %)) issues)))
+

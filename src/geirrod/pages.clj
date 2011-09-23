@@ -9,17 +9,14 @@
 
 (enlive/deftemplate issues-page "html/issues.html" [lanes]
   [:ol#lanes :li]
-  (enlive/clone-for [[title issues] lanes]
-                    (enlive/content title)))
+  (enlive/clone-for [lane lanes]
+                    (enlive/content lane)))
 
 (defn issues-html [account repo]
-  "TODO: Add issues")
-
-(comment (defn issues-html [account repo]
-    (let [issues (issues account repo "open")
-          labels (labels account repo)
-          label-names (label-names labels)
-          statuses (category-val "status" label-names)
-          lanes (category-group statuses issues)]
-      (apply str (issues-page statuses)))))
+  (let [issues (issues account repo "open")
+        labels (labels account repo)
+        label-names (label-names labels)
+        lanes (lanes "status" label-names)
+        issues-by-lane (group-by-lane "status" issues)]
+    (apply str (issues-page lanes))))
 
