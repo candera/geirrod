@@ -1,6 +1,16 @@
 (ns geirrod.github-api
+  (:use geirrod.util)
   (:require [clj-json.core :as json]
             [clj-http.client :as http]))
+
+;;; Terminology
+;;;
+;;; Category - e.g. "status", "estimate". The first part of a label
+;;; with spaces in it. These are the axes that we can use to divide
+;;; issues into groups.
+;;;
+;;; Lane - e.g. "open", "ready for dev". The second part of a label
+;;; with spaces in it. These are the headings for groups of issues.
 
 ;;; URLs
 
@@ -56,12 +66,30 @@
   [labels]
   (map #(get % "name") labels))
 
-(defn category-values
-  "Given a seq of label names, return a seq of the values for a
+(defn lanes
+  "Given a seq of label names, return a seq of lanes for a
   specified category. The category is the first word of a label with
-  spaces in it. The value is the rest of the label."
-  [label-names category]
-  (let [category-prefix (str category " ")]
+  spaces in it. The lane is the rest of the label."
+  [category label-names]
+  (let [prefix (str category " ")
+        prefix-len (count prefix)]
     (->> label-names
-         (filter #(.startsWith % category-prefix))
-         (map #(subs % (count category-prefix))))))
+         (filter #(.startsWith % prefix))
+         (map #(subs % prefix-len)))))
+
+(defn lanes-for-issue
+  "Given a category and an issue, return a seq of lanes that issue
+  belongs in."
+  [category issue]
+  (->> (get issue "labels")
+       (label-names)
+       (lanes category)))
+
+(defn group-by-lanes
+  "Given a category (e.g. 'status') and a seq of issues, return a map
+  of lanes to seqs of issues in those lanes. Note that an issue can
+  appear in more than one lane if it has more than one label for a
+  given category."
+  [category issues]
+  (reduce merge-to-sets
+   (map #(zipmap (lanes-for-issue category %) (repeat %)) issues)))
