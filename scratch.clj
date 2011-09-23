@@ -41,9 +41,18 @@
 (use :reload-all 'geirrod.pages)
 (use 'geirrod.github-api)
 
-(def i (issues "candera" "artifact" "open"))
+(def i (issues "candera" "geirrod" "open"))
 
 (category-values (label-names (labels i)) "status")
 
 (issues-html "candera" "artifact")
+
+(require '[net.cgrand.enlive-html :as enlive])
+(enlive/defsnippet b "html/snippets.html" [:#issue-box] []
+  [:div]
+  enlive/unwrap)
+
+(b)
+
+i
 
