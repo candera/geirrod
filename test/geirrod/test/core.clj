@@ -1,6 +1,0 @@
-(ns geirrod.test.core
-  (:use [geirrod.core])
-  (:use [clojure.test]))
-
-(deftest replace-me ;; FIXME: write
-  (is false "No tests have been written."))
