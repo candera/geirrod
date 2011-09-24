@@ -56,3 +56,48 @@
 
 i
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use 'net.cgrand.enlive-html)
+
+(enlive/defsnippet issue-box "html/snippets.html" [:.issue-box] [issue]
+  [:a]
+  (content (get issue "number"))
+
+  [:.issue-title]
+  (content (get issue "name")))
+
+(enlive/defsnippet lane "html/snippets.html" [:.lane] [l issues]
+  [:h2]
+  (enlive/content l)
+
+  [:ol]
+  (content (map issue-box issues)))
+
+(use 'geirrod.github-api)
+
+(def i (issues "candera" "geirrod" "open"))
+
+(clojure.pprint/pprint (first i))
+
+(get (first i) "number")
+(get (first i) "title")
+(get (first i) "html_url")
+
+(apply str (emit* (at (html-resource "html/issues.html")
+
+            [:ol#lanes]
+            (content (map #(lane % (get issues-by-lane %)) ["a" "b" "c"])))))
+
+(lane "foo")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(let [account "candera"
+      repo "geirrod"
+      issues (issues account repo "open")
+      labels (labels account repo)
+      label-names (label-names labels)
+      lanes (lanes "status" label-names)]
+  (group-by-lane "status" issues))
