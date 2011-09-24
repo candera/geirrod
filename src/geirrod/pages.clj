@@ -4,13 +4,23 @@
 
 (defn test-page [] "Hi!")
 
-(enlive/defsnippet issue-box "html/snippets.html" [:#issue-box] [issue]
-  identity)
+(enlive/defsnippet issue-box "html/snippets.html" [:.issue-box] [issue]
+  [:a]
+  (enlive/content (str (issue-number issue)))
 
-(enlive/deftemplate issues-page "html/issues.html" [lanes]
-  [:ol#lanes :li]
-  (enlive/clone-for [lane lanes]
-                    (enlive/content lane)))
+  [:.issue-title]
+  (enlive/content (issue-title issue)))
+
+(enlive/defsnippet lane "html/snippets.html" [:.lane] [l issues]
+  [:h2]
+  (enlive/content l)
+
+  [:ol]
+  (enlive/content (map issue-box issues)))
+
+(enlive/deftemplate issues-page "html/issues.html" [issues-by-lane lanes]
+  [:#lanes]
+  (enlive/content (map #(lane % (get issues-by-lane %)) lanes)))
 
 (defn issues-html [account repo]
   (let [issues (issues account repo "open")
@@ -18,5 +28,5 @@
         label-names (label-names labels)
         lanes (lanes "status" label-names)
         issues-by-lane (group-by-lane "status" issues)]
-    (apply str (issues-page lanes))))
+    (apply str (issues-page issues-by-lane lanes))))
 

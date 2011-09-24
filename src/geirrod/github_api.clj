@@ -61,6 +61,16 @@
           #{}
           issues))
 
+(defn issue-title
+  "Given an issue, return its title."
+  [issue]
+  (get issue "title"))
+
+(defn issue-number
+  "Given an issue, return its number."
+  [issue]
+  (get issue "number"))
+
 (defn label-names
   "Given a seq of labels, return a seq of their names."
   [labels]
@@ -91,6 +101,6 @@
   appear in more than one lane if it has more than one label for a
   given category."
   [category issues]
-  (reduce merge-to-sets
-          (map #(zipmap (lanes-for-issue category %) (repeat %)) issues)))
+  (apply merge-to-sets
+         (map #(zipmap (lanes-for-issue category %) (repeat %)) issues)))
 

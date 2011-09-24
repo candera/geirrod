@@ -8,7 +8,7 @@
   (into {} (map (fn [[k v]] [k #{v}]) m)))
 
 (defn merge-to-sets
-  "Merge two maps, turning the values into sets containing all the
-  unique items from the corresponding keys of all maps."
+  "Merge maps, turning the values into sets containing all the unique
+  items from the corresponding keys of all maps."
   [& maps]
   (reduce #(merge-with into %1 %2) (map setify-map maps)))
