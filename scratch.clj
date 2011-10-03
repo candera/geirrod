@@ -101,3 +101,20 @@ i
       label-names (label-names labels)
       lanes (lanes "status" label-names)]
   (group-by-lane "status" issues))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use 'compojure.core)
+(use 'clojure.pprint)
+(require '[compojure.handler :as handler])
+(require '[ring.middleware.params :as params])
+(def mr (params/wrap-params
+         (GET "/issues/:user/:repo"
+              [user repo & params]
+              (with-out-str (pprint [user repo params])))))
+
+(print
+ (:body
+  (mr {:uri "/issues/candera/geirrod"
+       :query-string "this=that&this=the-other-thing"
+       :request-method :get})))
