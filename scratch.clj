@@ -118,3 +118,15 @@ i
   (mr {:uri "/issues/candera/geirrod"
        :query-string "this=that&this=the-other-thing"
        :request-method :get})))
+
+
+(def mr2 (params/wrap-params
+          (GET "/issues/:user/:repo?display=grid"
+               [user repo & params]
+               (with-out-str (pprint [user repo params])))))
+
+(print
+ (:body
+  (mr2 {:uri "/issues/candera/geirrod"
+        :query-string "display=grid"
+        :request-method :get})))
