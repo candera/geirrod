@@ -16,7 +16,8 @@
   ;; 303. This is because we want the redirect to result in a GET, not
   ;; a POST.
   (compojure/POST "/" [account repo] (response/redirect-after-post (str "/issues/" account "/" repo)))
-  (compojure/GET "/issues/:account/:repo" [account repo] (pages/issues-html account repo)))
+  (compojure/GET "/issues/:account/:repo" [account repo & params]
+                 (pages/issues-html account repo params)))
 
 (compojure/defroutes default-routes
   (route/resources "/")
