@@ -76,10 +76,20 @@
   [labels]
   (map #(get % "name") labels))
 
+(defn categories
+  "Given a seq of label names, return a seq of unique categories.
+  This is the first word from any labels that contain a space."
+  [label-names]
+  (->> label-names
+       (map #(clojure.string/split % #" " 2))
+       (filter #(> (count %) 1))
+       (map first)
+       (set)))
+
 (defn lanes
-  "Given a seq of label names, return a seq of lanes for a
-  specified category. The category is the first word of a label with
-  spaces in it. The lane is the rest of the label."
+  "Given a category and a seq of label names, return a seq of lanes
+  for a specified category. The category is the first word of a label
+  with spaces in it. The lane is the rest of the label."
   [category label-names]
   (let [prefix (str category " ")
         prefix-len (count prefix)]
