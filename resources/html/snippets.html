@@ -3,13 +3,22 @@
   <ol></ol>
 </li>
 
-<li class="issue-box">
+<ol id="issue-grid"></ol>
+
+<li class="lane">
   <a href="todo">Number here</a>
   <span class="issue-title">Title here</span>
+  <ol></ol>
 </li>
 
-<select class="category-select">
-  <option value=""></option>
-</select>
+<form method="get" target="?display=grid" id="category-select">
+  <p>Display issues by cateogry:
+    <select name="group" required="true">
+      <option value=""></option>
+    </select>
+    <button name="display" value="grid">Go!</button>
+  </p>
+</form>
+
 
 
