@@ -130,3 +130,15 @@ i
   (mr2 {:uri "/issues/candera/geirrod"
         :query-string "display=grid"
         :request-method :get})))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use 'geirrod.github-api)
+(def account "candera")
+(def repo "geirrod")
+(def category "status")
+(def geirrod-labels (labels account repo))
+(def geirrod-label-names (label-names geirrod-labels))
+(def geirrod-issues (issues account repo "open"))
+(def geirrod-lanes (lanes category geirrod-label-names))
+(def issues-by-lane (group-by-lane category geirrod-issues))
+(geirrod.pages/grid geirrod-lanes issues-by-lane)
