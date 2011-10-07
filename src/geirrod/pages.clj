@@ -25,10 +25,21 @@
                      (enlive/content category)
                      (enlive/set-attr :value category))))
 
-(enlive/defsnippet grid "html/snippets.html" [:#issue-grid] [lanes issues-by-lane]
+(enlive/defsnippet nonexistent-category-error "html/snippets.html" [:#nonexistent-category-error]
+  [category]
+  [:span]
+  (enlive/content category))
+
+(enlive/defsnippet grid "html/snippets.html" [:#issue-grid]
+  [lanes issues-by-lane]
   (enlive/content (map #(lane % (get issues-by-lane %)) lanes)))
 
-(enlive/deftemplate issues-page "html/issues.html" [content]
+(enlive/deftemplate issues-page "html/issues.html" [account repo content]
+  [:h1 :a]
+  (enlive/do->
+   (enlive/content (str account "/" repo))
+   (enlive/set-attr :href (repo-link account repo)))
+
   [:body]
   (enlive/append content))
 
@@ -40,13 +51,15 @@
    (cond
     (= display "grid")
     (let [issues (issues account repo "open")
-          lanes (lanes category label-names)
-          issues-by-lane (group-by-lane category issues)]
-      (grid lanes issues-by-lane))
+          lanes (lanes category label-names)]
+      (if (empty? lanes)
+        (nonexistent-category-error category)
+        (grid lanes (group-by-lane category issues))))
 
     :else
     (category-select (categories label-names)))))
 
 (defn issues-html [account repo params]
-  (let [{display :display category :group} params]
-    (apply str (issues-page (issues-content account repo display category)))))
+  (let [{:keys [display category]} params]
+    (apply str (issues-page account repo
+                            (issues-content account repo display category)))))

@@ -1,3 +1,8 @@
+<li class="issue-box">
+  <a href="todo"></a>
+  <h3 class="issue-title"></h3>
+</li>
+
 <li class="lane">
   <h2>Lane Title</h2>
   <ol></ol>
@@ -5,20 +10,18 @@
 
 <ol id="issue-grid"></ol>
 
-<li class="lane">
-  <a href="todo">Number here</a>
-  <span class="issue-title">Title here</span>
-  <ol></ol>
-</li>
-
 <form method="get" target="?display=grid" id="category-select">
-  <p>Display issues by cateogry:
-    <select name="group" required="true">
+  <p>Display issues by:
+    <select name="category" required="true">
       <option value=""></option>
     </select>
     <button name="display" value="grid">Go!</button>
   </p>
 </form>
+
+<p id="nonexistent-category-error">
+Sorry, there does not appear to be a category called <span>category</span>
+</p>
 
 
 

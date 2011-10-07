@@ -18,6 +18,12 @@
   base-url
   "https://api.github.com/")
 
+(defn repo-link
+  "Returns the GitHub URL for a project. Note this is not the API
+  link, but a link to the actual GitHub website."
+  [account repo]
+  (str "https://github.com/" account "/" repo))
+
 (defn- repo-url
   "Returns the GitHub URL that's the basis for operations against a
   particular user's repo."
