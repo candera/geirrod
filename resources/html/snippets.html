@@ -10,7 +10,12 @@
 
 <ol id="issue-grid"></ol>
 
-<form method="get" target="?display=grid" id="category-select">
+<table id="issue-list">
+  <tr><th>ID</th><th>Title</th></tr>
+  <tr class="issue-row"><td></td><td></td></tr>
+</table>
+
+<form method="get" id="category-select">
   <p>Display issues by:
     <select name="category" required="true">
       <option value=""></option>

@@ -34,6 +34,17 @@
   [lanes issues-by-lane]
   (enlive/content (map #(lane % (get issues-by-lane %)) lanes)))
 
+(enlive/defsnippet flat "html/snippets.html" [:#issue-list]
+  [issues]
+  [:tr.issue-row]
+  (enlive/clone-for [issue issues]
+                    [[:td (enlive/nth-of-type 1)]]
+                    (enlive/content (str (issue-number issue)))
+
+                    [[:td (enlive/nth-of-type 2)]]
+                    (enlive/content (issue-title issue))))
+
+
 (enlive/deftemplate issues-page "html/issues.html" [account repo content]
   [:h1 :a]
   (enlive/do->
@@ -57,7 +68,9 @@
         (grid lanes (group-by-lane category issues))))
 
     :else
-    (category-select (categories label-names)))))
+    (concat
+     (category-select (categories label-names))
+     (flat (issues account repo "open"))))))
 
 (defn issues-html [account repo params]
   (let [{:keys [display category]} params]
