@@ -142,3 +142,10 @@ i
 (def geirrod-lanes (lanes category geirrod-label-names))
 (def issues-by-lane (group-by-lane category geirrod-issues))
 (geirrod.pages/grid geirrod-lanes issues-by-lane)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require '[net.cgrand.enlive-html :as enlive])
+(def s (enlive/html-resource "html/snippets.html"))
+
+(enlive/select s [[:td (enlive/nth-of-type 2)]])
