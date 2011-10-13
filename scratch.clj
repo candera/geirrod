@@ -149,3 +149,31 @@ i
 (def s (enlive/html-resource "html/snippets.html"))
 
 (enlive/select s [[:td (enlive/nth-of-type 2)]])
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(import '[java.io BufferedReader PushbackReader StringReader])
+(def sr (StringReader. ";; This is a comment
+[1 2 3]
+;; This is a comment
+ (Hello world!)"))
+(def brp (proxy [BufferedReader] [sr]
+           (read
+             ([]
+                (println "read()")
+                (proxy-super read))
+             ([cbuf off len]
+                (println "read(cbuf, off, len)")
+                (proxy-super read cbuf off len)))))
+
+(def pbr (PushbackReader. brp))
+
+(.mark brp 4000)
+(.readLine brp)
+(.reset brp)
+(.readLine brp)
+(read pbr)
+(.mark sr 4000)
+(.reset sr)
+(.skip sr -1000)
+(read pbr)
